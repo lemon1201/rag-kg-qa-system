@@ -10,8 +10,8 @@
 ## 当前里程碑
 - [x] M1：项目骨架 + 可运行 API demo
 - [x] M2：可运行检索闭环（BM25 + TF-IDF向量 + 图谱检索）
-- [ ] M3：重排与证据一致性校验（真实模型版）
-- [ ] M4：Neo4j / 向量库生产化接入
+- [x] M3：重排与证据一致性校验（规则版，可运行）
+- [ ] M4：Neo4j / 向量库生产化接入 + LLM真实生成
 
 ## 目录结构
 ```
@@ -56,7 +56,9 @@ python -m uvicorn ragkg.api.app:app --reload --app-dir src
   "answer": "...",
   "confidence": 0.78,
   "citations": [{"doc_id":"doc-001","chunk_id":"c-12","text":"..."}],
-  "graph_paths": [{"from":"成果A","rel":"包含","to":"指标B"}],
+  "graph_paths": [{"from_node":"成果A","rel":"包含","to":"指标B"}],
+  "evidence_coverage": 0.67,
+  "review_reason": "ok",
   "needs_human_review": false
 }
 ```

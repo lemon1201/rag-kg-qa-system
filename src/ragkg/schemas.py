@@ -24,4 +24,6 @@ class QAResponse(BaseModel):
     confidence: float
     citations: List[Citation]
     graph_paths: List[GraphPath]
+    evidence_coverage: float
+    review_reason: str
     needs_human_review: bool

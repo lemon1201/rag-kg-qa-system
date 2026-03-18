@@ -46,7 +46,12 @@ def _cosine(a: Dict[str, float], b: Dict[str, float], b_norm: float) -> float:
 
 def bm25_retrieve(question: str, top_k: int) -> List[Dict]:
     idx = _load_index()
-    bm25 = idx["bm25"]
+    bm25_cfg = idx["bm25"]
+    bm25 = SimpleBM25(
+        bm25_cfg["tokenized_docs"],
+        k1=bm25_cfg.get("k1", 1.5),
+        b=bm25_cfg.get("b", 0.75),
+    )
     chunks = idx["chunks"]
 
     scored = []

@@ -105,7 +105,11 @@ def build_index() -> None:
 
     payload = {
         "chunks": [c.__dict__ for c in chunks],
-        "bm25": bm25,
+        "bm25": {
+            "tokenized_docs": corpus_tokens,
+            "k1": bm25.k1,
+            "b": bm25.b,
+        },
         "idf": idf,
         "doc_vectors": doc_vectors,
         "doc_norms": doc_norms,
