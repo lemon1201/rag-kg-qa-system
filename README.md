@@ -7,13 +7,11 @@
 - 支持多路召回：BM25 + 向量检索 + 图谱检索
 - 支持重排、证据一致性检查与“不确定”兜底
 
-## 当前里程碑（M1）
-- [x] 项目骨架
-- [x] 配置与数据结构定义
-- [x] 可运行 API demo（stub）
-- [ ] 文档解析与抽取流水线
-- [ ] FAISS/BM25/Neo4j 接入
-- [ ] 重排与验证模块
+## 当前里程碑
+- [x] M1：项目骨架 + 可运行 API demo
+- [x] M2：可运行检索闭环（BM25 + TF-IDF向量 + 图谱检索）
+- [ ] M3：重排与证据一致性校验（真实模型版）
+- [ ] M4：Neo4j / 向量库生产化接入
 
 ## 目录结构
 ```
@@ -29,10 +27,14 @@ tests/          # 单测
 ```
 
 ## 快速开始
+> 建议 Python 3.11 / 3.12（当前部分依赖对 3.14 支持不完整）
+
 ```bash
 python -m venv .venv
 . .venv/Scripts/activate   # Windows
 pip install -r requirements.txt
+powershell -ExecutionPolicy Bypass -File scripts/prepare_sample_data.ps1
+python src/ragkg/ingest/build_index.py
 python -m uvicorn ragkg.api.app:app --reload --app-dir src
 ```
 
