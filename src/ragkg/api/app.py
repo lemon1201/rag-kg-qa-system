@@ -1,11 +1,12 @@
 from fastapi import FastAPI
-from ragkg.schemas import QARequest, QAResponse, Citation, GraphPath
+from ragkg.schemas import QARequest, QAResponse, AgentQAResponse, Citation, GraphPath
 from ragkg.retrieval.pipeline import hybrid_retrieve
 from ragkg.generation.rerank import rerank_hits
 from ragkg.generation.pipeline import build_context, generate_answer, extract_citations
 from ragkg.generation.verify import verify_with_evidence
+from ragkg.agent.orchestrator import run_agent_qa
 
-app = FastAPI(title="rag-kg-qa-system", version="0.3.0")
+app = FastAPI(title="rag-kg-qa-system", version="0.4.0")
 
 
 @app.get("/health")
@@ -47,4 +48,31 @@ def qa(req: QARequest):
         evidence_coverage=verify_result["coverage"],
         review_reason=verify_result["reason"],
         needs_human_review=verify_result["needs_human_review"],
+    )
+
+
+@app.post("/agent/qa", response_model=AgentQAResponse)
+def agent_qa(req: QARequest):
+    result = run_agent_qa(req.question, top_k=req.top_k)
+
+    citations = [
+        Citation(doc_id=x["doc_id"], chunk_id=x["chunk_id"], text=x["text"])
+        for x in result.citations
+    ]
+    graph_paths = [
+        GraphPath(from_node=x.get("from", x.get("from_node", "")), rel=x["rel"], to=x["to"])
+        for x in result.graph_paths
+    ]
+
+    return AgentQAResponse(
+        answer=result.answer,
+        confidence=result.confidence,
+        citations=citations,
+        graph_paths=graph_paths,
+        evidence_coverage=result.evidence_coverage,
+        review_reason=result.review_reason,
+        needs_human_review=result.needs_human_review,
+        attempts=result.attempts,
+        policy=result.policy,
+        trace=result.trace,
     )

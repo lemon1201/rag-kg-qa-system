@@ -40,7 +40,8 @@ python -m uvicorn ragkg.api.app:app --reload --app-dir src
 
 接口：
 - `GET /health`
-- `POST /qa`
+- `POST /qa`（M3 流程式）
+- `POST /agent/qa`（M4 分支：流程式编排 + 重试 + trace）
 
 ## 示例请求
 ```json

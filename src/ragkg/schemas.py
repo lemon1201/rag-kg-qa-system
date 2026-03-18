@@ -1,5 +1,5 @@
-from pydantic import BaseModel, Field
-from typing import List
+from pydantic import BaseModel
+from typing import List, Dict, Any
 
 
 class Citation(BaseModel):
@@ -27,3 +27,9 @@ class QAResponse(BaseModel):
     evidence_coverage: float
     review_reason: str
     needs_human_review: bool
+
+
+class AgentQAResponse(QAResponse):
+    attempts: int
+    policy: str
+    trace: List[Dict[str, Any]]
