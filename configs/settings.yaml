@@ -1,0 +1,16 @@
+project:
+  name: rag-kg-qa-system
+  env: dev
+retrieval:
+  top_k: 5
+  bm25_weight: 0.3
+  vector_weight: 0.5
+  graph_weight: 0.2
+generation:
+  max_context_chunks: 8
+  require_citation: true
+  confidence_threshold: 0.65
+graph:
+  provider: neo4j
+  uri: "bolt://localhost:7687"
+  database: "neo4j"
